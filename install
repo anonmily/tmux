@@ -1,6 +1,42 @@
 #!/bin/bash
 
-sudo apt-get -y install tmux
-gem install tmuxinator
-ln -s tmux ~/.tmux
-ln -s tmux.conf ~/.tmux.conf
+install(){
+	if [ $(command -v $1 > /dev/null 2>&1) ]
+		then
+			echo "$1 not found. Installing $2"
+			sudo apt-get -y install $2 
+	fi
+}
+
+linkconf(){
+	ln -sf $(pwd)/tmux.conf ~/.tmux.conf
+}
+linkplugins(){
+	 ln -sf $(pwd)/tmux ~/.tmux
+}
+
+install tmux tmux
+install gem ruby
+install tmuxinator tmuxinator
+
+if [ -a ~/.tmux.conf ]
+	then
+		echo "~/.tmux.conf already exists. Override? [y/n]"
+		read choice
+		if [ $choice == "n" ]
+			then echo "Skipping ~/.tmux.conf"
+			else linkconf
+		fi
+	else linkconf
+fi
+
+if [ -d ~/.tmux ]
+	then
+		echo "~/.tmux already exists. Override? [y/n]"	
+		read choice
+		if [ $choice == "n" ]
+			then echo "Skipping ~/.tmux"
+			else linkplugins
+		fi
+	else linkplugins
+fi
