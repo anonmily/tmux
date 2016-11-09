@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sudo apt-get -y install tmux
+gem install tmuxinator
+ln -s tmux ~/.tmux
+ln -s tmux.conf ~/.tmux.conf
